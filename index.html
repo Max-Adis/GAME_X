@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> GAME ⚔ </title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Bungee&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-red: #ff073a;
+            --neon-blue: #0066ff;
+            --neon-green: #00cc66;
+            --neon-yellow: #ffcc00;
+            --neon-purple: #9c27b0;
+            --neon-orange: #ff9800;
+            --neon-pink: #e91e63;
+            --neon-cyan: #00bcd4;
+            --light-bg: #f0f2f5;
+            --panel-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #1a1a2e;
+            --text-light: #ffffff;
+            --glow: 0 0 10px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 60px;
+        }
+        
+        /* Navigation Gaming */
+        nav {
+            background: var(--panel-bg);
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+        
+        .nav-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-family: 'Bungee', cursive;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            position: relative;
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+        
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--neon-blue);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link.active {
+            color: var(--neon-blue);
+            text-shadow: var(--glow) rgba(0, 102, 255, 0.3);
+        }
+        
+        /* Pages */
+        .page {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.5s;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            background: var(--panel-bg);
+            border-top: 2px solid var(--neon-blue);
+            font-family: 'Bungee', cursive;
+            color: var(--neon-blue);
+            letter-spacing: 1px;
+        }
+        
+        /* Page Programmation */
+        #accueil {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .welcome-message {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--neon-blue);
+            font-family: 'Bungee', cursive;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 102, 255, 0.5);
+        }
+        
+        .tele-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .tele-card {
+            background: var(--panel-bg);
+            border: 2px solid var(--neon-blue);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .tele-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.2);
+            border-color: var(--neon-green);
+        }
+        
+        .tele-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+        
+        .tele-title i {
+            font-size: 1.8rem;
+        }
+        
+        /* Couleurs des icônes par télé */
+        .tele-card:nth-child(1) .tele-title { color: var(--neon-red); }
+        .tele-card:nth-child(2) .tele-title { color: var(--neon-blue); }
+        .tele-card:nth-child(3) .tele-title { color: var(--neon-yellow); }
+        .tele-card:nth-child(4) .tele-title { color: var(--neon-green); }
+        
+        .time-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .time-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .time-input label {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .time-input input {
+            width: 80px;
+            padding: 0.7rem;
+            text-align: center;
+            background: white;
+            border: 2px solid var(--neon-blue);
+            border-radius: 8px;
+            color: var(--text-dark);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .time-input input:focus {
+            outline: none;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 204, 102, 0.2);
+        }
+        
+        .program-btn {
+            background: var(--neon-blue);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 auto;
+            display: block;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0, 102, 255, 0.3);
+        }
+        
+        .program-btn:hover {
+            background: var(--neon-green);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 204, 102, 0.3);
+        }
+        
+        /* Page Contrôle */
+        #controle {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .control-card {
+            background: var(--panel-bg);
+            border: 2px solid var(--neon-red);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .control-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 25px rgba(255, 7, 58, 0.2);
+        }
+        
+        .control-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+        
+        .control-title i {
+            font-size: 1.8rem;
+        }
+        
+        /* Couleurs des icônes par télé */
+        .control-card:nth-child(1) .control-title { color: var(--neon-red); }
+        .control-card:nth-child(2) .control-title { color: var(--neon-blue); }
+        .control-card:nth-child(3) .control-title { color: var(--neon-yellow); }
+        .control-card:nth-child(4) .control-title { color: var(--neon-green); }
+        
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .btn-on, .btn-off {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-on {
+            background: var(--neon-green);
+            color: white;
+        }
+        
+        .btn-off {
+            background: var(--neon-red);
+            color: white;
+        }
+        
+        .btn-on:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 204, 102, 0.3);
+        }
+        
+        .btn-off:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 7, 58, 0.3);
+        }
+        
+        /* Page Statistiques */
+        #statistiques {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            background: var(--panel-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-table th, .stats-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .stats-table th {
+            background: var(--neon-blue);
+            color: white;
+            font-family: 'Bungee', cursive;
+            letter-spacing: 1px;
+        }
+        
+        .stats-table tr:nth-child(even) {
+            background: rgba(0, 102, 255, 0.1);
+        }
+        
+        .stats-table tr:hover {
+            background: rgba(0, 102, 255, 0.15);
+        }
+        
+        .stats-table td {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+        
+        .stats-table td i {
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .stats-total {
+            margin-top: 2rem;
+            background: var(--panel-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .total-hours, .total-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+        
+        .total-hours span, .total-price span {
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+        }
+        
+        /* Bouton de réinitialisation en bas */
+        .reset-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .reset-btn {
+            background: var(--neon-red);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 10px rgba(255, 7, 58, 0.3);
+        }
+        
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(255, 7, 58, 0.4);
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--panel-bg);
+            border-left: 4px solid var(--neon-green);
+            color: var(--text-dark);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            transform: translateX(200%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            max-width: 350px;
+        }
+        
+        .notification i {
+            font-size: 1.5rem;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            border-left-color: var(--neon-red);
+        }
+        
+        .notification.warning {
+            border-left-color: var(--neon-yellow);
+        }
+        
+        /* Indicateur de connexion */
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .connection-status.connected {
+            background: var(--neon-green);
+            color: white;
+        }
+        
+        .connection-status.disconnected {
+            background: var(--neon-red);
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { gap: 1rem; }
+            .nav-link { font-size: 0.9rem; }
+            .time-controls { flex-wrap: wrap; }
+            .tele-container, .control-grid { grid-template-columns: 1fr; }
+            .stats-total { flex-direction: column; gap: 1rem; }
+            .footer { position: static; margin-top: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Indicateur de connexion -->
+    <div class="connection-status connected" id="connection-status">
+        <i class="fas fa-wifi"></i> Connecté
+    </div>
+    
+    <!-- Navigation Gaming -->
+    <nav>
+        <div class="nav-links">
+            <a href="#" class="nav-link active" data-page="accueil">
+                <i class="fas fa-clock"></i> Programmation
+            </a>
+            <a href="#" class="nav-link" data-page="controle">
+                <i class="fas fa-gamepad"></i> Contrôle
+            </a>
+            <a href="#" class="nav-link" data-page="statistiques">
+                <i class="fas fa-chart-bar"></i> Statistiques
+            </a>
+        </div>
+    </nav>
+    
+    <!-- Page Programmation -->
+    <div class="page active" id="accueil">
+        <h1 class="welcome-message">
+            <i class="fas fa-tv"></i> GAME ⚔
+        </h1>
+        
+        <div class="tele-container">
+            <!-- Télé 1 - Thème Mortal Kombat -->
+            <div class="tele-card">
+                <h2 class="tele-title">
+                    <i class="fas fa-fire-alt"></i> TÉLÉ 1
+                </h2>
+                <div class="time-controls">
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> HEURES</label>
+                        <input type="number" id="tele1-hours" min="0" max="23" value="0">
+                    </div>
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> MINUTES</label>
+                        <input type="number" id="tele1-minutes" min="0" max="59" value="30">
+                    </div>
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> SECONDES</label>
+                        <input type="number" id="tele1-seconds" min="0" max="59" value="0">
+                    </div>
+                </div>
+                <button class="program-btn" data-tele="1">
+                    <i class="fas fa-power-off"></i> PROGRAMMER
+                </button>
+            </div>
+            
+            <!-- Télé 2 - Thème Spider-Man -->
+            <div class="tele-card">
+                <h2 class="tele-title">
+                    <i class="fas fa-spider"></i> TÉLÉ 2
+                </h2>
+                <div class="time-controls">
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> HEURES</label>
+                        <input type="number" id="tele2-hours" min="0" max="23" value="0">
+                    </div>
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> MINUTES</label>
+                        <input type="number" id="tele2-minutes" min="0" max="59" value="30">
+                    </div>
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> SECONDES</label>
+                        <input type="number" id="tele2-seconds" min="0" max="59" value="0">
+                    </div>
+                </div>
+                <button class="program-btn" data-tele="2">
+                    <i class="fas fa-power-off"></i> PROGRAMMER
+                </button>
+            </div>
+            
+            <!-- Télé 3 - Thème FIFA -->
+            <div class="tele-card">
+                <h2 class="tele-title">
+                    <i class="fas fa-futbol"></i> TÉLÉ 3
+                </h2>
+                <div class="time-controls">
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> HEURES</label>
+                        <input type="number" id="tele3-hours" min="0" max="23" value="0">
+                    </div>
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> MINUTES</label>
+                        <input type="number" id="tele3-minutes" min="0" max="59" value="30">
+                    </div>
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> SECONDES</label>
+                        <input type="number" id="tele3-seconds" min="0" max="59" value="0">
+                    </div>
+                </div>
+                <button class="program-btn" data-tele="3">
+                    <i class="fas fa-power-off"></i> PROGRAMMER
+                </button>
+            </div>
+            
+            <!-- Télé 4 - Thème Arcade -->
+            <div class="tele-card">
+                <h2 class="tele-title">
+                    <i class="fas fa-gamepad"></i> TÉLÉ 4
+                </h2>
+                <div class="time-controls">
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> HEURES</label>
+                        <input type="number" id="tele4-hours" min="0" max="23" value="0">
+                    </div>
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> MINUTES</label>
+                        <input type="number" id="tele4-minutes" min="0" max="59" value="30">
+                    </div>
+                    <div class="time-input">
+                        <label><i class="far fa-clock"></i> SECONDES</label>
+                        <input type="number" id="tele4-seconds" min="0" max="59" value="0">
+                    </div>
+                </div>
+                <button class="program-btn" data-tele="4">
+                    <i class="fas fa-power-off"></i> PROGRAMMER
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Page Contrôle Direct -->
+    <div class="page" id="controle">
+        <h1 class="welcome-message">
+            <i class="fas fa-gamepad"></i> CONTRÔLE DIRECT
+        </h1>
+        
+        <div class="control-grid">
+            <!-- Télé 1 -->
+            <div class="control-card">
+                <h2 class="control-title">
+                    <i class="fas fa-fire-alt"></i> TÉLÉ 1
+                </h2>
+                <div class="btn-group">
+                    <button class="btn-on" data-tele="1">
+                        <i class="fas fa-play"></i> ON
+                    </button>
+                    <button class="btn-off" data-tele="1">
+                        <i class="fas fa-stop"></i> OFF
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Télé 2 -->
+            <div class="control-card">
+                <h2 class="control-title">
+                    <i class="fas fa-spider"></i> TÉLÉ 2
+                </h2>
+                <div class="btn-group">
+                    <button class="btn-on" data-tele="2">
+                        <i class="fas fa-play"></i> ON
+                    </button>
+                    <button class="btn-off" data-tele="2">
+                        <i class="fas fa-stop"></i> OFF
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Télé 3 -->
+            <div class="control-card">
+                <h2 class="control-title">
+                    <i class="fas fa-futbol"></i> TÉLÉ 3
+                </h2>
+                <div class="btn-group">
+                    <button class="btn-on" data-tele="3">
+                        <i class="fas fa-play"></i> ON
+                    </button>
+                    <button class="btn-off" data-tele="3">
+                        <i class="fas fa-stop"></i> OFF
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Télé 4 -->
+            <div class="control-card">
+                <h2 class="control-title">
+                    <i class="fas fa-gamepad"></i> TÉLÉ 4
+                </h2>
+                <div class="btn-group">
+                    <button class="btn-on" data-tele="4">
+                        <i class="fas fa-play"></i> ON
+                    </button>
+                    <button class="btn-off" data-tele="4">
+                        <i class="fas fa-stop"></i> OFF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Page Statistiques -->
+    <div class="page" id="statistiques">
+        <h1 class="welcome-message">
+            <i class="fas fa-chart-line"></i> STATISTIQUES
+        </h1>
+        
+        <table class="stats-table">
+            <thead>
+                <tr>
+                    <th><i class="fas fa-tv"></i> Télé</th>
+                    <th><i class="far fa-calendar-alt"></i> Date</th>
+                    <th><i class="far fa-clock"></i> Heure</th>
+                    <th><i class="fas fa-hourglass-half"></i> Durée</th>
+                </tr>
+            </thead>
+            <tbody id="stats-body">
+                <!-- Rempli dynamiquement -->
+            </tbody>
+        </table>
+
+        <!-- Total des heures + Calcul des gains -->
+        <div class="stats-total">
+            <div class="total-hours">
+                Total heures: <span id="total-hours">0h 0m</span>
+            </div>
+            <div class="total-price">
+                Gains totaux: <span id="total-price">0 F</span> (100F/15min)
+            </div>
+        </div>
+        
+        <!-- Bouton de réinitialisation en bas -->
+        <div class="reset-container">
+            <button class="reset-btn" id="reset-stats">
+                <i class="fas fa-trash"></i> Réinitialiser les Statistiques
+            </button>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer">
+        by Max_Adis
+    </div>
+    
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Message de notification</span>
+    </div>
+    
+    <script>
+        // Variables globales
+        let teleStats = [];
+        let connectionCheckInterval;
+        const PRICE_PER_15MIN = 100;
+        const teleIcons = {
+            1: "fas fa-fire-alt",
+            2: "fas fa-spider",
+            3: "fas fa-futbol",
+            4: "fas fa-gamepad"
+        };
+        
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPage = this.getAttribute('data-page');
+                
+                // Mettre à jour la navigation
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Afficher la page cible
+                document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
+                
+                // Si on va sur la page des statistiques, les recharger
+                if (targetPage === 'statistiques') {
+                    loadStats();
+                }
+            });
+        });
+        
+        // Programmation des télés
+        document.querySelectorAll('.program-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tele = this.getAttribute('data-tele');
+                const hours = document.getElementById(`tele${tele}-hours`).value;
+                const minutes = document.getElementById(`tele${tele}-minutes`).value;
+                const seconds = document.getElementById(`tele${tele}-seconds`).value;
+                
+                // Validation
+                if (hours < 0 || minutes < 0 || seconds < 0) {
+                    showNotification('Veuillez entrer des valeurs positives', 'error');
+                    return;
+                }
+                
+                if (hours == 0 && minutes == 0 && seconds == 0) {
+                    showNotification('Veuillez entrer une durée valide', 'error');
+                    return;
+                }
+                
+                // Envoi de la requête
+                fetch('/program', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `tele=${tele}&hours=${hours}&minutes=${minutes}&seconds=${seconds}`
+                })
+                .then(response => response.text())
+                .then(data => {
+                    showNotification(data);
+                    // Recharger les statistiques
+                    loadStats();
+                })
+                .catch(error => {
+                    showNotification('Erreur de connexion', 'error');
+                    console.error('Erreur:', error);
+                });
+            });
+        });
+        
+        // Contrôle direct
+        document.querySelectorAll('.btn-on, .btn-off').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tele = this.getAttribute('data-tele');
+                const action = this.classList.contains('btn-on') ? 'on' : 'off';
+                
+                fetch('/control', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `tele=${tele}&action=${action}`
+                })
+                .then(response => response.text())
+                .then(data => {
+                    showNotification(data);
+                    if (action === 'on') {
+                        // Recharger les statistiques si on allume
+                        loadStats();
+                    }
+                })
+                .catch(error => {
+                    showNotification('Erreur de connexion', 'error');
+                    console.error('Erreur:', error);
+                });
+            });
+        });
+        
+        // Réinitialisation des statistiques
+        document.getElementById('reset-stats').addEventListener('click', function() {
+            if (confirm('Êtes-vous sûr de vouloir réinitialiser toutes les statistiques ?')) {
+                fetch('/resetStats', {
+                    method: 'POST'
+                })
+                .then(response => response.text())
+                .then(data => {
+                    showNotification(data);
+                    loadStats();
+                })
+                .catch(error => {
+                    showNotification('Erreur de connexion', 'error');
+                    console.error('Erreur:', error);
+                });
+            }
+        });
+        
+        // Fonction pour charger les statistiques
+        function loadStats() {
+            fetch('/stats')
+            .then(response => response.json())
+            .then(data => {
+                teleStats = data.stats || [];
+                
+                // Mettre à jour le tableau
+                const statsBody = document.getElementById('stats-body');
+                statsBody.innerHTML = '';
+                
+                teleStats.forEach(stat => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><i class="${teleIcons[stat.tele]}"></i> Télé ${stat.tele}</td>
+                        <td>${stat.date}</td>
+                        <td>${stat.time}</td>
+                        <td>${stat.duration}</td>
+                    `;
+                    statsBody.appendChild(row);
+                });
+                
+                // Mettre à jour les totaux
+                document.getElementById('total-hours').textContent = 
+                    `${Math.floor(data.total_hours)}h ${data.total_minutes}m`;
+                
+                document.getElementById('total-price').textContent = 
+                    `${data.total_price} F`;
+            })
+            .catch(error => {
+                console.error('Erreur lors du chargement des statistiques:', error);
+            });
+        }
+        
+        // Fonction pour afficher les notifications
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = message;
+            
+            // Appliquer le style selon le type
+            notification.className = 'notification';
+            if (type === 'error') {
+                notification.classList.add('error');
+            } else if (type === 'warning') {
+                notification.classList.add('warning');
+            }
+            
+            // Afficher la notification
+            notification.classList.add('show');
+            
+            // Cacher après 3 secondes
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Vérification de la connexion
+        function checkConnection() {
+            fetch('/stats', { method: 'GET' })
+            .then(response => {
+                if (!response.ok) throw new Error('Erreur de connexion');
+                updateConnectionStatus(true);
+            })
+            .catch(error => {
+                updateConnectionStatus(false);
+            });
+        }
+        
+        // Mettre à jour l'indicateur de connexion
+        function updateConnectionStatus(connected) {
+            const statusElement = document.getElementById('connection-status');
+            
+            if (connected) {
+                statusElement.className = 'connection-status connected';
+                statusElement.innerHTML = '<i class="fas fa-wifi"></i> Connecté';
+            } else {
+                statusElement.className = 'connection-status disconnected';
+                statusElement.innerHTML = '<i class="fas fa-wifi-slash"></i> Déconnecté';
+                showNotification('Connexion perdue', 'error');
+            }
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Charger les statistiques au démarrage
+            loadStats();
+            
+            // Vérifier la connexion toutes les 5 secondes
+            connectionCheckInterval = setInterval(checkConnection, 5000);
+            
+            // Vérifier la connexion immédiatement
+            checkConnection();
+        });
+    </script>
+</body>
+</html>
