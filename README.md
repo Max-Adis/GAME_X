@@ -1,2 +1,2 @@
-# GAME_X.github.io
+# GAME_X
 Pour un projet de gestion de jeux 
